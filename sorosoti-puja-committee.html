@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/2536/2536805.png">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="auth.js"></script>
+            
+    <title>সরস্বতী পূজা আয়োজক কমিটি</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+        body {
+            font-family:  "Hind Siliguri", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4fa;
+        }
+        .container {
+            width: 90%;
+            max-width: auto;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 5px 0 0;
+            font-size: 16px;
+            color: #666;
+        }
+        .search-container {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .search-container input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #f0f4fa;
+            font-weight: bold;
+        }
+        table td {
+            background-color: #f9fbfd;
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            .header p {
+                font-size: 16px;
+            }
+            table th, table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <br>
+            <h1>সরস্বতী পূজা ২০২৫ ইং বর্ষ আয়োজন কমিটি</h1>
+            <p>--</p>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="অনুসন্ধান করুন...">
+        </div>
+        <table>
+            <thead>
+              <th>ক্রম</th>
+                <th>পদ</th>
+                <th>নাম</th>
+                <th>মোবাইল নাম্বার</th>
+              </tr>
+            </thead>
+            <tbody id="data-table">
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const sheetId = '198Mix4b5TKiFVPSuGOgWvZRaUKqjQ2PZzxtmw7sjvC4'; // Replace with your actual sheet ID
+        const apiKey = 'AIzaSyBvShpNn-4av3KWuQuUdmhl3S54rw2JFZY'; // Replace with your actual API key
+
+        // Set the sheet name from back-end
+        const sheetName = 'sorosoti-puja-com25'; // Replace with the sheet name provided by your back-end
+
+        async function fetchSheetData(sheetName) {
+            try {
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:Z1000?key=${apiKey}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Data fetched:', data); // Log data to check the structure
+                const rows = data.values;
+
+                const tableBody = document.getElementById('data-table');
+                tableBody.innerHTML = '';
+
+                if (rows && rows.length > 1) { // Check if there is data other than the header row
+                    for (let i = 1; i < rows.length; i++) { // Skip header row
+                        const row = rows[i];
+                        const tr = document.createElement('tr');
+
+                        for (const cell of row) {
+                            const td = document.createElement('td');
+                            td.textContent = cell || ''; // Handle empty cells
+                            tr.appendChild(td);
+                        }
+
+                        tableBody.appendChild(tr);
+                    }
+                } else {
+                    console.warn('No data found in the sheet.');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Fetch data for the specified sheet
+        fetchSheetData(sheetName);
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('keyup', function() {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#data-table tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let match = false;
+
+                cells.forEach(cell => {
+                    if (cell.textContent.toLowerCase().includes(query)) {
+                        match = true;
+                    }
+                });
+
+                if (match) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+  
+</body>
+</html>

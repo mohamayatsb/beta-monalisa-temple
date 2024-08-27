@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/2536/2536805.png">
+    <script src="auth.js"></script>
+    
+    <title>Responsive Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://cdn-icons-png.flaticon.com/512/2536/2536805.png" alt="Logo" class="logo">
+
+            <div onclick="openPage('user-porfile.html')">
+            <div class="profile-icon">
+                <img src="https://cdn-icons-png.flaticon.com/512/6084/6084667.png" alt="Profile Icon">
+            </div>
+            </div>
+        </header>
+        <main>
+            <div class="welcome-text">
+                
+                <p>শ্রী শ্রী কালী মাতা ও দূর্গা মাতার মন্দির</p>
+                <p style="color:black;">দেবেন্দ্র কাহালী লেন (মোনালিসা গলি) বাংলা স্কুল মোড়, সদর রোড, ভোলা।</p>
+                <br>
+                <marquee style="background-color: #EBB109; color: black;">এই সফটওয়্যার আন্ডার ডেভলোপমেন্টের মধ্যে আছে তাই কিছু 🐞 Bug থাকতে পারে এর জন্য আমরা আন্তরিক ভাবে দুঃখিত।</marquee>
+            </div>
+            <div class="features">
+                <div class="feature" onclick="openPage('durga-puja-committee.html')">
+                    <img src="https://www.pngitem.com/pimgs/m/622-6220453_maa-kali-face-png-transparent-png.png" alt="Registration Icon">
+                    <p>দূর্গা পূজা আয়োজক কমিটি</p>
+                </div>
+                <div class="feature" onclick="openPage('kali-puja-committee.html')">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ6JVTs1N8Jz4PWXSk0V1HR1qK81iWyIhU1A&s"" alt="Prescription Icon">
+                    <p>কালী পূজা আয়োজক কমিটি</p>
+                </div>
+
+              <div class="feature" onclick="openPage('sorosoti-puja-committee.html')">
+                <img src="https://png.pngtree.com/png-clipart/20230124/ourmid/pngtree-saraswati-puja-png-image_6565758.png" alt="Apply Icon">
+                <p>সরস্বতী পূজা আয়োজক কমিটি</p>
+              </div>
+              <div class="feature" onclick="openPage('collection-area-list.html')">
+                <img src="https://cdn-icons-png.flaticon.com/512/14831/14831599.png" alt="Apply Icon">
+                <p>কালেকশনের এলাকার নাম</p>
+              </div>
+              
+                <div class="feature" onclick="openPage('durga-puja-budget.html')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/12621/12621921.png" alt="Donation Icon">
+                    <p>দূর্গা পূজার বাজেট</p>
+                </div>
+
+              
+                <div class="feature" onclick="openPage('area-list.html')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/532/532988.png" alt="Account Icon">
+                    <p>এলাকার লিস্ট</p>
+                </div>
+                <div class="feature" onclick="openPage('https://forms.gle/PUDWoddW7TQ4NyaK9')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3579/3579045.png" alt="Chat Icon">
+                    <p>সদস্য রেজিস্ট্রেশন</p>
+                </div>
+                <div class="feature" onclick="openPage('members.html')">
+                  <img src="https://cdn-icons-png.flaticon.com/512/6543/6543820.png" alt="Chat Icon">
+                  <p>সদস্যদের লিস্ট</p>
+              </div>
+
+            </div>
+        </main>
+
+        <!--
+        <footer>
+            <div class="footer-menu">
+                <div class="menu-item">
+                    <img src="icons/Home (8).svg" alt="Home Icon">
+                    <p>হোম</p>
+                </div>
+                <div class="menu-item">
+                    <img src="icons/Knowladge.svg" alt="Info Icon">
+                    <p>জ্ঞান অর্জন</p>
+                </div>
+                <div class="menu-item">
+                    <img src="icons/Members.svg" alt="Activity Icon">
+                    <p>কমিটি</p>
+                </div>
+                <div class="menu-item">
+                    <img src="icons/Updates.svg" alt="Update Icon">
+                    <p>আপডেট</p>
+                </div>
+                <div class="menu-item">
+                    <img src="icons/Settings (1).svg" alt="Settings Icon">
+                    <p>সেটিংস</p>
+                </div>
+            </div>
+        </footer>
+        -->
+    </div>
+    <script src="script.js">
+    </script>
+</body>
+</html>

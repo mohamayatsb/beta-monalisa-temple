@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/6084/6084667.png">
+    <title>Profile</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="auth.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+        body {
+            font-family: "Hind Siliguri", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f4f8;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .profile-form h2 {
+            color: #F3B709;
+        }
+
+        .profile-form label {
+            display: block;
+            margin-top: 1em;
+            color: #333;
+        }
+
+        .profile-form input {
+            width: 100%;
+            padding: 0.5em;
+            margin-top: 0.5em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .profile-form button {
+            width: 100%;
+            padding: 0.7em;
+            margin-top: 1em;
+            background-color: #F3B709;
+            font-family: "Hind Siliguri", sans-serif;
+            color: #1E1E1E;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile-form button:hover {
+            background-color: #F3B709;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-form">
+            <h2>আপনার প্রোফাইল</h2>
+            <form id="profileForm">
+                <label for="name">আপনার নাম লিখুন</label>
+                <input type="text" id="name" required>
+                <label for="email">আপনার ই-মেইল লিখুন</label>
+                <input type="email" id="email" required disabled>
+                <label for="mobile">আপনার মোবাইল নাম্বার লিখুন</label>
+                <input type="text" id="mobile" required>
+                <label for="profilePicture">আপনার ছবি আপলোড করুন</label>
+                <input type="file" id="profilePicture">
+                <button type="submit">সেভ করুন</button>
+            </form>
+            <button id="logout">লগ আউট</button>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBQPf08Yo53PEv9HOoU6PHxtsIgfveIj7A",
+            authDomain: "mondir-app.firebaseapp.com",
+            projectId: "mondir-app",
+            storageBucket: "mondir-app.appspot.com",
+            messagingSenderId: "1010908784407",
+            appId: "1:1010908784407:web:6436a643eb23178158b952"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Check if user is authenticated
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Fetch user profile from Realtime Database
+                const userId = user.uid;
+                database.ref('users/' + userId).once('value').then(snapshot => {
+                    const userProfile = snapshot.val();
+                    if (userProfile) {
+                        document.getElementById('name').value = userProfile.name || '';
+                        document.getElementById('email').value = user.email;
+                        document.getElementById('mobile').value = userProfile.mobile || '';
+                    }
+                });
+            } else {
+                // Redirect to login page
+                window.location.href = "login.html";
+            }
+        });
+
+        // Handle profile form submission
+        document.getElementById('profileForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const user = auth.currentUser;
+            const name = document.getElementById('name').value;
+            const mobile = document.getElementById('mobile').value;
+            const profilePicture = document.getElementById('profilePicture').files[0];
+
+            if (user) {
+                const userId = user.uid;
+                const userProfileRef = database.ref('users/' + userId);
+
+                userProfileRef.set({
+                    name: name,
+                    mobile: mobile,
+                    email: user.email
+                }).then(() => {
+                    if (profilePicture) {
+                        const storageRef = firebase.storage().ref();
+                        const profilePicRef = storageRef.child('profilePictures/' + userId);
+                        profilePicRef.put(profilePicture).then(snapshot => {
+                            snapshot.ref.getDownloadURL().then(url => {
+                                userProfileRef.update({ profilePicture: url });
+                            });
+                        });
+                    }
+                    alert('Profile updated successfully!');
+                }).catch(error => {
+                    alert('Error updating profile: ' + error.message);
+                });
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logout').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = "login.html";
+            }).catch(error => {
+                alert('Error signing out: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
